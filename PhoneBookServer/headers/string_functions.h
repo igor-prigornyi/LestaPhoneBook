@@ -23,7 +23,8 @@ std::vector<size_t> FindAllPositionsOfCharInString(std::string_view str, char c)
 
 }
 
-// Функция разделения строки на слова через пробел
+// Функция разделения строки на слова через символы-сепараторы
+// (знаки препинания ".", "?", "!", ".", ":", ",", ";", кавычки, скобки "()", "[]", "{}" и пробел " ")
 // (возвращает вектор string_view, ссылающихся на оригинальную строку)
 std::vector<std::string_view> SplitIntoWords(std::string_view str);
 

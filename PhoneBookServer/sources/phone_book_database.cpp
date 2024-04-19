@@ -163,11 +163,9 @@ size_t PhoneBookDatabase::AddRecordById(size_t record_id, const Record& record) 
     // TF = Число вхождений (упоминаний) слова в заметке / Число слов в заметке
     // (https://ru.wikipedia.org/wiki/TF-IDF)
 
-    // Вначале разделим заметку в записи на отдельные слова
+    // Вначале разделим заметку в записи на отдельные слова через символы-сепараторы
+    // (знаки препинания ".", "?", "!", ".", ":", ",", ";", кавычки, скобки "()", "[]", "{}" и пробел " ")
     vector<string_view> note_words = string_functions::SplitIntoWords(records_[record_id].note);
-
-    // Замечание: разделение на слова будет происходить через пробел, без учёта знаков препинания
-    // ("!", "?", ".", ",", ";" и т.д.), это можно исправить, доработав функцию SplitIntoWords
 
     // Вычислим константу inv_word_count = 1 / Число слов в заметке
     const double inv_word_count = 1.0 / static_cast<double>(note_words.size());

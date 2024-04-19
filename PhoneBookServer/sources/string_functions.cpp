@@ -34,22 +34,27 @@ vector<size_t> FindAllPositionsOfCharInString(string_view str, char c) {
 
 }
 
-// Функция разделения строки на слова через пробел
+// Функция разделения строки на слова через символы-сепараторы
+// (знаки препинания ".", "?", "!", ".", ":", ",", ";", кавычки, скобки "()", "[]", "{}" и пробел " ")
 // (возвращает вектор string_view, ссылающихся на оригинальную строку)
 vector<string_view> SplitIntoWords(string_view str) {
 
     // Вектор с разделёнными словами
     vector<string_view> words;
 
-    // В бесконечном цикле ищем следующий пробел в строке и откусываем от неё часть от начала
-    // до пробела, таким образом разделяя строку на слова через пробел, и так до тех пор, пока
-    // не дойдём до конца строки
-    while (true) {
-        const auto space = str.find(' ');
-        words.push_back(str.substr(0, space));
+    // Символы-сепараторы:
+    const static string separator_chars = "!?.:,;\"()[]{} "s;
 
-        if (space == str.npos) break;
-        else str.remove_prefix(space + 1);
+    // В бесконечном цикле ищем следующий символ-сепаратор в строке и откусываем от неё часть от начала
+    // до символа-сепаратора, таким образом разделяя строку на слова через символы-сепараторы, и так до
+    // тех пор, пока не дойдём до конца строки
+    while (true) {
+        size_t separator_pos = str.find_first_of(separator_chars);
+        string_view word = str.substr(0, separator_pos);
+
+        if (!word.empty()) words.push_back(str.substr(0, separator_pos));
+        if (separator_pos == str.npos) break;
+        else str.remove_prefix(separator_pos + 1);
     }
 
     // Возвращаем вектор с разделёнными словами
