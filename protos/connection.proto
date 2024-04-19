@@ -1,0 +1,118 @@
+// Используем синтаксис proto3
+syntax = "proto3";
+
+// Название пространства имён, в которое будут помещены сгенерированные для С++ классы и функции
+package phone_book_proto;
+
+// Сервис связи между клиентом и сервером телефонной книги
+service PhoneBookConnection {
+    // Функция запроса на добавление записи (тип 1-1)
+    rpc AddRecord (RecordRequest) returns (AddRecordResponse);
+
+    // Функция запроса на удаление записи по номеру записи (тип 1-1)
+    rpc DeleteRecordById (DeleteRecordByIdRequest) returns (DeleteRecordResponse);
+
+    // Функция запроса на удаление записи по номеру телефона (тип 1-1)
+    rpc DeleteRecordByNumber (DeleteRecordByNumberRequest) returns (DeleteRecordResponse);
+
+    // Функция запроса на поиск записи по номеру записи (тип 1-1)
+    // (найденная запись может быть только одна или её может не быть вовсе)
+    rpc FindRecordById (FindRecordByIdRequest) returns (RecordResponse) {}
+
+    // Функция запроса на поиск записей по имени (тип 1-M)
+    // (найденных записей может быть множество или не быть вовсе)
+    rpc FindRecordsByName (FindRecordsByNameRequest) returns (stream RecordResponse) {}
+
+    // Функция запроса на поиск записей по фамилии (тип 1-M)
+    // (найденных записей может быть множество или не быть вовсе)
+    rpc FindRecordsBySurname (FindRecordsBySurnameRequest) returns (stream RecordResponse) {}
+
+    // Функция запроса на поиск записей по отчеству (тип 1-M)
+    // (найденных записей может быть множество или не быть вовсе)
+    rpc FindRecordsByPatronymic (FindRecordsByPatronymicRequest) returns (stream RecordResponse) {}
+
+    // Функция запроса на поиск записи по номеру телефона (тип 1-1)
+    // (найденная запись может быть только одна или её может не быть вовсе)
+    rpc FindRecordByNumber (FindRecordByNumberRequest) returns (RecordResponse) {}
+
+    // Функция запроса на поиск записей по заметке (тип 1-M)
+    // (найденных записей может быть множество или не быть вовсе)
+    rpc FindRecordsByNote (FindRecordsByNoteRequest) returns (stream RecordResponse) {}
+}
+
+// Запрос на добавление записи
+// (в запросе отстутствует поле с id записи, так как id новой записи присваивает сервер)
+message RecordRequest{
+    string name       = 1; // Имя
+    string surname    = 2; // Фамилия
+    string patronymic = 3; // Отчество
+    string number     = 4; // Телефонный номер
+    string note       = 5; // Заметка
+}
+
+// Запрос на получении записи
+// (в запросе присутствует поле с id записи в базе данных сервера)
+message RecordResponse{
+    uint32 id         = 1; // Номер записи
+    string name       = 2; // Имя
+    string surname    = 3; // Фамилия
+    string patronymic = 4; // Отчество
+    string number     = 5; // Телефонный номер
+    string note       = 6; // Заметка
+}
+
+// Ответ на запрос о добавлении записи
+message AddRecordResponse {
+    uint32 code = 1;
+}
+
+// Ответ на запрос об удалении записи
+message DeleteRecordResponse {
+    uint32 code = 1;
+}
+
+// Запрос на удаление записи по номеру записи
+message DeleteRecordByIdRequest {
+    uint32 id = 1;
+}
+
+// Запрос на удаление записи по номеру телефона
+message DeleteRecordByNumberRequest {
+    string number = 1;
+}
+
+// Запрос на поиск записи по номеру записи
+// (найденная запись может быть только одна или её может не быть вовсе)
+message FindRecordByIdRequest {
+    uint32 id = 1;
+}
+
+// Запрос на поиск записей по имени
+// (найденных записей может быть множество или не быть вовсе)
+message FindRecordsByNameRequest {
+    string name = 1;
+}
+
+// Запрос на поиск записей по фамилии
+// (найденных записей может быть множество или не быть вовсе)
+message FindRecordsBySurnameRequest {
+    string surname = 1;
+}
+
+// Запрос на поиск записей по отчеству
+// (найденных записей может быть множество или не быть вовсе)
+message FindRecordsByPatronymicRequest {
+    string patronymic = 1;
+}
+
+// Запрос на поиск записи по номеру телефона
+// (найденная запись может быть только одна или её может не быть вовсе)
+message FindRecordByNumberRequest {
+    string number = 1;
+}
+
+// Запрос на поиск записей по заметке
+// (найденных записей может быть множество или не быть вовсе)
+message FindRecordsByNoteRequest {
+    string note = 1;
+}
