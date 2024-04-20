@@ -18,17 +18,17 @@ export GRPC_INSTALL_DIR=$HOME/.local
 export PATH="$GRPC_INSTALL_DIR/bin:$PATH"
 ```
 
-Переходим в дерикторию сервра:
+Переходим в директорию проекта сервра:
 ```console
 cd PhoneBookServer
 ```
 
-Создаём (при отсутствии) дерикторию со сборкой:
+Создаём (при отсутствии) директорию со сборкой:
 ```console
 mkdir -p cmake/build
 ```
 
-Переходим в дерикторию со сборкой:
+Переходим в директорию со сборкой:
 ```console
 cd cmake/build
 ```
@@ -54,7 +54,7 @@ make clean
 
 ## Сборка проекта консольной версии клиента PhoneBookClientConsole:
 
-Переходим в дерикторию консольной версии клиента:
+Переходим в директорию проекта консольной версии клиента:
 ```console
 cd PhoneBookClientConsole
 ```
@@ -71,7 +71,7 @@ python3 main.py
 
 ## Сборка проекта GUI версии клиента PhoneBookClientGUI:
 
-Переходим в дерикторию GUI версии клиента:
+Переходим в директорию проекта GUI версии клиента:
 ```console
 cd PhoneBookClientGUI
 ```
