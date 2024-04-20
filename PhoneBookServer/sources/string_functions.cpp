@@ -32,6 +32,54 @@ vector<size_t> FindAllPositionsOfCharInString(string_view str, char c) {
     return positions;
 }
 
+// Функция преобразования "&quot;" в кавычки в строке
+string ConverteAmpersandSequencesToQuotes(string_view str) {
+
+    // Если "&quot;" вообще не встречаются в строке, возвращаем её копию
+    if (str.find("&quot;"s) == str.npos) return string(str);
+
+    // Иначе пробегаем по строке и формируем такую же, но с "&quot;", заменёнными на кавычки
+    string result = ""s;
+
+    while (true) {
+        size_t quot_pos = str.find("&quot;"s);
+        result += str.substr(0, quot_pos);
+
+        if (quot_pos == str.npos) break;
+        else {
+            result += "\""s;
+            str.remove_prefix(quot_pos + 6);
+        }
+    }
+
+    // Возвращаем результат
+    return result;
+}
+
+// Функция преобразования кавычек в "&quot;" в строке
+string ConverteQuotesToAmpersandSequences(string_view str) {
+
+    // Если кавычки вообще не встречаются в строке, возвращаем её копию
+    if (str.find('\"') == str.npos) return string(str);
+
+    // Иначе пробегаем по строке и формируем такую же, но с кавычками, заменёнными на "&quot;"
+    string result = ""s;
+
+    while (true) {
+        size_t quot_pos = str.find("\""s);
+        result += str.substr(0, quot_pos);
+
+        if (quot_pos == str.npos) break;
+        else {
+            result += "&quot;"s;
+            str.remove_prefix(quot_pos + 1);
+        }
+    }
+
+    // Возвращаем результат
+    return result;
+}
+
 }
 
 // Функция разделения строки на слова через символы-сепараторы
@@ -84,10 +132,13 @@ vector<string_view> SortAndRemoveDuplicates(vector<string_view> words) {
 // (используется при загрузке данных из файла в базу данных)
 pair<size_t, size_t> ParseInfoStringFromFile(string_view str) {
 
-    // Пример строки: <records_count="13" last_record_id="18">
+    // Пример строки: <records_count="42" last_record_id="53">
+
+    // Для удобства подключим внутри функции пространство имён detail
+    using namespace detail;
 
     // Находим все позици символа кавычек в строке
-    auto positions = detail::FindAllPositionsOfCharInString(str, '\"');
+    auto positions = FindAllPositionsOfCharInString(str, '\"');
 
     // Получаем число записей в базе данных
     size_t records_count  = stoi(string(str.substr(positions[0] + 1, positions[1] - positions[0] - 1)));
@@ -103,31 +154,75 @@ pair<size_t, size_t> ParseInfoStringFromFile(string_view str) {
 // (используется при загрузке данных из файла в базу данных)
 tuple<size_t, string, string, string, string, string> ParseRecordStringFromFile(string_view str) {
 
-    // Пример строки: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer">
+    // Пример строки: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer at &quotLesta Games&quot">
+
+    // Для удобства подключим внутри функции пространство имён detail
+    using namespace detail;
 
     // Находим все позици символа кавычек в строке
-    auto positions = detail::FindAllPositionsOfCharInString(str, '\"');
+    auto positions = FindAllPositionsOfCharInString(str, '\"');
 
     // Получаем номер/id записи
-    size_t id  = stoi(string(str.substr(positions[0] + 1, positions[1] - positions[0] - 1)));
+    size_t id  = stoi(string(str.substr(positions[0] + 1,
+                                        positions[1] - positions[0] - 1)));
 
-    // Получаем имя
-    string name(str.substr(positions[2] + 1, positions[3] - positions[2] - 1));
+    // Получаем имя (заменяя "&quot;" на кавычки)
+    string name = ConverteAmpersandSequencesToQuotes(str.substr(positions[2] + 1,
+                                                                positions[3] - positions[2] - 1));
 
-    // Получаем фамилию
-    string surname(str.substr(positions[4] + 1, positions[5] - positions[4] - 1));
+    // Получаем фамилию (заменяя "&quot;" на кавычки)
+    string surname = ConverteAmpersandSequencesToQuotes(str.substr(positions[4] + 1,
+                                                                   positions[5] - positions[4] - 1));
 
-    // Получаем отчество
-    string patronymic(str.substr(positions[6] + 1, positions[7] - positions[6] - 1));
+    // Получаем отчество (заменяя "&quot;" на кавычки)
+    string patronymic = ConverteAmpersandSequencesToQuotes(str.substr(positions[6] + 1,
+                                                                      positions[7] - positions[6] - 1));
 
-    // Получаем номер телефона
-    string number(str.substr(positions[8] + 1, positions[9] - positions[8] - 1));
+    // Получаем номер телефона (заменяя "&quot;" на кавычки)
+    string number = ConverteAmpersandSequencesToQuotes(str.substr(positions[8] + 1,
+                                                                  positions[9] - positions[8] - 1));
 
-    // Получаем заметку
-    string note(str.substr(positions[10] + 1, positions[11] - positions[10] - 1));
+    // Получаем заметку (заменяя "&quot;" на кавычки)
+    string note = ConverteAmpersandSequencesToQuotes(str.substr(positions[10] + 1,
+                                                                positions[11] - positions[10] - 1));
 
     // Возвращаем результат
     return {id, name, surname, patronymic, number, note};
+}
+
+// Функция упаковки строки с информацией о числе записей в базе данных и номере/id последней записи
+// (используется при сохранении данных из базы в файл)
+string PackInfoStringForFile(size_t records_count, size_t last_record_id) {
+
+    // Пример строки-результата: <records_count="42" last_record_id="53">
+
+    // Упаковываем информацию в строку
+    string result = "<records_count=\""s + to_string(records_count) + "\" last_record_id=\""s + to_string(last_record_id) + "\">"s;
+
+    // Возвращаем результат
+    return result;
+}
+
+// Функция упаковки строки с записью для базы данных
+// (используется при сохранении данных из базы в файл)
+string PackRecordStringForFile(size_t id, string_view name, string_view surname, string_view patronymic, string_view number, string_view note) {
+
+    // Пример строки-результата: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer at &quotLesta Games&quot">
+
+    // Для удобства подключим внутри функции пространство имён detail
+    using namespace detail;
+
+    // Упаковываем информацию в строку, заменяя в имени/фамилии/отчестве/номере телефона/заметке кавычки на "&quot;"
+    string result = "<id=\""s           + to_string(id) +
+                    "\" name=\""s       + ConverteQuotesToAmpersandSequences(name)       +
+                    "\" surname=\""s    + ConverteQuotesToAmpersandSequences(surname)    +
+                    "\" patronymic=\""s + ConverteQuotesToAmpersandSequences(patronymic) +
+                    "\" number=\""s     + ConverteQuotesToAmpersandSequences(number)     +
+                    "\" note=\""s       + ConverteQuotesToAmpersandSequences(note)       +
+                    "\">"s;
+
+    // Возвращаем результат
+    return result;
 }
 
 }

@@ -3,8 +3,8 @@
 // Header guard (предотвращает повторное включение заголовочного файла)
 #pragma once
 
-// Подключим библиотеку string для работы со строками, библиотеку tuple для работы с
-// кортежами и библиотеку vector для использования контейнеров вектора
+// Подключим библиотеку string для работы со строками, библиотеку tuple для работы
+// с кортежами и библиотеку vector для использования контейнеров вектора
 #include <string>
 #include <tuple>
 #include <vector>
@@ -20,6 +20,12 @@ namespace detail {
 
 // Функция нахождения всех позиций вхождения символа в строку
 std::vector<size_t> FindAllPositionsOfCharInString(std::string_view str, char c);
+
+// Функция преобразования "&quot;" в кавычки в строке
+std::string ConverteAmpersandSequencesToQuotes(std::string_view str);
+
+// Функция преобразования кавычек в "&quot;" в строке
+std::string ConverteQuotesToAmpersandSequences(std::string_view str);
 
 }
 
@@ -42,5 +48,14 @@ std::pair<size_t, size_t> ParseInfoStringFromFile(std::string_view str);
 // (используется при загрузке данных из файла в базу данных)
 std::tuple<size_t, std::string, std::string, 
                    std::string, std::string, std::string> ParseRecordStringFromFile(std::string_view str);
+
+// Функция упаковки строки с информацией о числе записей в базе данных и номере/id последней записи
+// (используется при сохранении данных из базы в файл)
+std::string PackInfoStringForFile(size_t records_count, size_t last_record_id);
+
+// Функция упаковки строки с записью для базы данных
+// (используется при сохранении данных из базы в файл)
+std::string PackRecordStringForFile(size_t id, std::string_view name,       std::string_view surname,
+                                               std::string_view patronymic, std::string_view number, std::string_view note);
 
 }
