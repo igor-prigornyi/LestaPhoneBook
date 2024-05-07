@@ -59,7 +59,7 @@ make clean
 cd PhoneBookClientConsole
 ```
 
-Собираем `pb2.grpc.py`-, `pb2.py`- и `pb2.pyi`-файлы из proto-файла:
+Собираем `pb2.grpc.py`-, `pb2.py`- и `pb2.pyi`-файлы из `proto`-файла:
 ```console
 python3 -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/connection.proto
 ```
@@ -81,7 +81,7 @@ cd PhoneBookClientGUI
 sudo apt install python3-tk
 ```
 
-Собираем `pb2.grpc.py`-, `pb2.py`- и `pb2.pyi`-файлы из proto-файла:
+Собираем `pb2.grpc.py`-, `pb2.py`- и `pb2.pyi`-файлы из `proto`-файла:
 ```console
 python3 -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/connection.proto
 ```

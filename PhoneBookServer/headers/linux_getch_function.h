@@ -3,7 +3,7 @@
 
 // Поскольку все объявленные здесь объекты и функции будут определены (иметь definition'ы)
 // в header-файле, то они будут иметь ключевое слово inline, чтобы не нарушать one
-// definition rule (они будут встраевыми)
+// definition rule (они будут встраиваемыми)
 
 // Header guard (предотвращает повторное включение заголовочного файла)
 #pragma once
@@ -47,7 +47,7 @@ inline void Init_new_terminal_input_output_settings() {
     // Копируем эти параметры из Previous в Current
     Current_terminal_input_output_settings = Previous_terminal_input_output_settings;
 
-    // Current-параметры будут отличаться отключенным буферезированием ввода-вывода
+    // Current-параметры будут отличаться отключенной буферизацией ввода-вывода
     // (disabled buffered input-output) и отключенным выводом в консоль вводимой
     // информации (no echo mode)
     Current_terminal_input_output_settings.c_lflag &= ~ICANON;

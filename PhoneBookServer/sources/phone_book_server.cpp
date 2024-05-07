@@ -219,7 +219,6 @@ void FindRecordByNumberProcessingFunction(PhoneBookDatabase& database,
                                           RecordResponse* response,
                                           const void* handler_tag) {
 
-    // ЗАГЛУШКА ДЛЯ ТЕСТОВ СОЕДИНЕНИЯ
     // Информируем в консоль о поступлении запроса на поиск записи по номеру/id записи
     cout << "[1-1 handler #"s << handler_tag << "]: FindRecordByNumber request, number=\""s << request->number() << "\""s << endl;
 
@@ -330,7 +329,7 @@ void PhoneBookServer::RunInNewThread() {
     // Factory/builder для создания gRPC-сервера
     ServerBuilder builder;
 
-    // Будем прослушивать входящие подключения на указаном порту без аутентификации 
+    // Будем прослушивать входящие подключения на указанном порту без аутентификации 
     builder.AddListeningPort(address, grpc::InsecureServerCredentials());
 
     // Зарегистрируем наш сервис асинхронной gRPC-коммуникации за нашим gRPC-сервером
@@ -461,7 +460,7 @@ void PhoneBookServer::HandlerQueueLoop() {
         //
         // Как только событие происходит, метод Next записывает в handler_iterator_tag void*-указатель на handler, для которого
         // надо совершить действие. При возникновении event'а метод Next возвращает true, таким образом мы итерируемся по очереди
-        // handler'ов при возникновении event'ов. При вызове метода Shutdown для остановке сервера, метод Next увидит event с
+        // handler'ов при возникновении event'ов. При вызове метода Shutdown для остановки сервера, метод Next увидит event с
         // остановкой работы очереди handler'ов и вернёт false, тогда мы выйдем из цикла.
         //
         // Также метод Next получает указатель на булево значение event_ok, куда записывает false, если у клиента на
@@ -469,7 +468,7 @@ void PhoneBookServer::HandlerQueueLoop() {
         // типа M-1 и M-M, которые не используются в сервере для телефонной книги.
         
         // После того, как метод Next отработал и разблокировал дальнейшее выполнение цикла, записав в handler_iterator_tag
-        // void*-указатель на hander, для которого произошёл event, наобходимо вызвать у этого handler'а функцию обработки.
+        // void*-указатель на hander, для которого произошёл event, необходимо вызвать у этого handler'а функцию обработки.
         //
         // Upcats'им указатель на этот handler до указателя на базовый класс BaseConnectionHandler и вызываем у него метод
         // обработки Proceed. Благодаря механизму динамического полиморфизма будет вызван метод наследника (классов

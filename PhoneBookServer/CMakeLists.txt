@@ -39,15 +39,21 @@ target_link_libraries(phone_book_grpc_proto
 include_directories("headers")
 
 # Функции для работы со строками (string_functions.cpp)
-add_library(string_functions "headers/string_functions.h" "sources/string_functions.cpp")
+add_library(string_functions
+            "headers/string_functions.h"
+            "sources/string_functions.cpp")
 
 # База данных для телефонной книги (phone_book_database.cpp)
-add_library(phone_book_database "headers/phone_book_database.h" "sources/phone_book_database.cpp")
+add_library(phone_book_database
+            "headers/phone_book_database.h"
+            "sources/phone_book_database.cpp")
 target_link_libraries(phone_book_database
                       string_functions)
 
 # Сервер для телефонной книги (phone_book_server.cpp)
-add_library(phone_book_server "headers/phone_book_server.h" "sources/phone_book_server.cpp")
+add_library(phone_book_server
+            "headers/phone_book_server.h"
+            "sources/phone_book_server.cpp")
 target_link_libraries(phone_book_server
                       phone_book_database
                       phone_book_grpc_proto

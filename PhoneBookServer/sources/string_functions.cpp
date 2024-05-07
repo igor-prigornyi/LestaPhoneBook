@@ -137,7 +137,7 @@ pair<size_t, size_t> ParseInfoStringFromFile(string_view str) {
     // Для удобства подключим внутри функции пространство имён detail
     using namespace detail;
 
-    // Находим все позици символа кавычек в строке
+    // Находим все позиции символа кавычек в строке
     auto positions = FindAllPositionsOfCharInString(str, '\"');
 
     // Получаем число записей в базе данных
@@ -154,12 +154,12 @@ pair<size_t, size_t> ParseInfoStringFromFile(string_view str) {
 // (используется при загрузке данных из файла в базу данных)
 tuple<size_t, string, string, string, string, string> ParseRecordStringFromFile(string_view str) {
 
-    // Пример строки: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer at &quotLesta Games&quot">
+    // Пример строки: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer at &quot;Lesta Games&quot;">
 
     // Для удобства подключим внутри функции пространство имён detail
     using namespace detail;
 
-    // Находим все позици символа кавычек в строке
+    // Находим все позиции символа кавычек в строке
     auto positions = FindAllPositionsOfCharInString(str, '\"');
 
     // Получаем номер/id записи
@@ -207,7 +207,7 @@ string PackInfoStringForFile(size_t records_count, size_t last_record_id) {
 // (используется при сохранении данных из базы в файл)
 string PackRecordStringForFile(size_t id, string_view name, string_view surname, string_view patronymic, string_view number, string_view note) {
 
-    // Пример строки-результата: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer at &quotLesta Games&quot">
+    // Пример строки-результата: <id="2" name="Александр" surname="Петров" patronymic="Иванович" number="+79754213275" note="C++ junior developer at &quot;Lesta Games&quot;">
 
     // Для удобства подключим внутри функции пространство имён detail
     using namespace detail;
